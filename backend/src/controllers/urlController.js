@@ -1,38 +1,41 @@
 const db = require('../models/db');
 const generateShortId = require('../utils/generateShortId');
 
-// Create short URL
-const createShortUrl = async (req, res) => {
-    const { original_url, custom_short_id, expires_in_days } = req.body;
-  
-    try {
-      const short_id = custom_short_id || generateShortId();
-      const custom = !!custom_short_id;
-  
-      const days = parseInt(expires_in_days) || 3;
-      const expires_at = new Date();
-      expires_at.setDate(expires_at.getDate() + days);
-  
-      // Check if short_id already exists
-      const existing = await db.query('SELECT * FROM urls WHERE short_id = $1', [short_id]);
-      if (existing.rows.length > 0) {
-        return res.status(409).json({ error: 'Short ID already exists, choose another.' });
-      }
-  
-      // Insert into DB
-      await db.query(
-        'INSERT INTO urls (short_id, original_url, expires_at, custom) VALUES ($1, $2, $3, $4)',
-        [short_id, original_url, expires_at, custom]
-      );
-  
-      res.status(201).json({ short_url: `${req.headers.host}/${short_id}`, expires_at });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Server error, please try again.' });
-    }
-  };
 
-// Redirect URL
+const createShortUrl = async (req, res) => {
+  const { original_url, custom_short_id, expires_in_days } = req.body;
+
+  try {
+    const short_id = custom_short_id || generateShortId();
+    const custom = !!custom_short_id;
+
+    const days = parseInt(expires_in_days) || 3;
+    const expires_at = new Date();
+    expires_at.setDate(expires_at.getDate() + days);
+
+    // Check if short_id already exists
+    const existing = await db.query('SELECT * FROM urls WHERE short_id = $1', [short_id]);
+    if (existing.rows.length > 0) {
+      return res.status(409).json({ error: 'Short ID already exists, choose another.' });
+    }
+
+    // Insert into DB
+    await db.query(
+      'INSERT INTO urls (short_id, original_url, expires_at, custom) VALUES ($1, $2, $3, $4)',
+      [short_id, original_url, expires_at, custom]
+    );
+
+    res.status(201).json({
+      short_id: short_id,
+      expires_at: expires_at
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error, please try again.' });
+  }
+};
+
 const redirectUrl = async (req, res) => {
   const { shortId } = req.params;
 
@@ -57,9 +60,8 @@ const redirectUrl = async (req, res) => {
     console.error(err);
     res.status(500).send('Server error');
   }
-};
+};;
 
-// URL Stats
 const urlStats = async (req, res) => {
   const { shortId } = req.params;
 
@@ -88,4 +90,8 @@ const urlStats = async (req, res) => {
   }
 };
 
-module.exports = { createShortUrl, redirectUrl, urlStats };
+module.exports = {
+  createShortUrl,
+  redirectUrl,
+  urlStats
+};

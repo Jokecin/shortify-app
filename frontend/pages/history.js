@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function History() {
   const [urls, setUrls] = useState([]);
-
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://18.231.208.120/';
   useEffect(() => {
     async function fetchUrls() {
       const res = await fetch('/api/history');
@@ -56,7 +56,7 @@ export default function History() {
                 <tr key={url.short_id} className="border-t">
                   <td className="px-4 py-2">
                     <a
-                      href={`http://localhost:5000/api/${url.short_id}`}
+                      href={`${baseUrl}/api/${url.short_id}`}
                       target="_blank"
                       className="text-blue-600 underline"
                     >

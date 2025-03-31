@@ -1,14 +1,16 @@
 const db = require('../models/db');
 const generateShortId = require('../utils/generateShortId');
-
+const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
 
 const createShortUrl = async (req, res) => {
-  const { original_url, custom_short_id, expires_in_days } = req.body;
+  const { originalUrl, custom_short_id, expires_in_days } = req.body;
+  const original_url = originalUrl;
 
   try {
+    console.log('Request body:', req.body);
     const short_id = custom_short_id || generateShortId();
     const custom = !!custom_short_id;
-
+    console.log('[DEBUG] BASE_URL:', baseUrl);
     const days = parseInt(expires_in_days) || 3;
     const expires_at = new Date();
     expires_at.setDate(expires_at.getDate() + days);
@@ -27,6 +29,7 @@ const createShortUrl = async (req, res) => {
 
     res.status(201).json({
       short_id: short_id,
+      short_url: `${baseUrl}/api/${short_id}`,
       expires_at: expires_at
     });
 

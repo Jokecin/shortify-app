@@ -6,6 +6,7 @@ export default function UrlForm() {
   const [expiresInDays, setExpiresInDays] = useState(3);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,11 +74,11 @@ export default function UrlForm() {
         <p className="mt-3">
         Short URL:{' '}
         <a
-          href={`http://localhost:5000/api/${result.short_id}`}
+          href={result.short_url}
           target="_blank"
           className="text-blue-500 underline"
         >
-          http://localhost:5000/api/{result.short_id}
+          {result.short_url}
         </a>
       </p>
       )}

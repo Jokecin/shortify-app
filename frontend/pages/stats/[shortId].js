@@ -6,6 +6,7 @@ import 'chart.js/auto';
 export default function UrlStats() {
   const router = useRouter();
   const { shortId } = router.query;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://18.231.208.120/';
 
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,12 +83,12 @@ export default function UrlStats() {
     <p>
       <strong>Short URL:</strong>{' '}
       <a
-        href={`http://localhost:5000/api/${stats.short_id}`}
+        href={`${baseUrl}/api/${stats.short_id}`}
         className="text-blue-600 underline"
         target="_blank"
         rel="noopener noreferrer"
       >
-        http://localhost:5000/api/{stats.short_id}
+        {baseUrl}/api/{stats.short_id}
       </a>
     </p>
   </div>

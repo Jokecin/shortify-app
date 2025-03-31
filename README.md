@@ -50,6 +50,7 @@ Shortify is a simple and efficient URL-shortening web application. It allows use
 
 - **Cloud / Deployment:**  
   - [AWS EC2](https://aws.amazon.com/ec2/) instance hosting both backend and frontend
+  - [AWS RDS](https://aws.amazon.com/rds/) with PostgreSQL database.
   - [Nginx](https://www.nginx.com/) as a reverse proxy
   - [GitHub Actions](https://github.com/features/actions) for CI/CD pipeline
 

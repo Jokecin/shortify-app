@@ -1,0 +1,30 @@
+name: Deploy ShortifyApp to EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Sync to EC2 and Restart PM2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v3
+
+      - name: Deploy over SSH to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/shortify-app
+            git pull origin main
+            npm install --prefix backend
+            npm install --prefix frontend
+            npm run build --prefix frontend
+            pm2 restart shortify-backend
+            pm2 restart shortify-frontend
+

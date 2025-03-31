@@ -2,6 +2,9 @@
 
 Shortify is a simple and efficient URL-shortening web application. It allows users to shorten lengthy URLs, track clicks, set expiration dates, and optionally customize the short URL suffix. This repository contains the **frontend** (Next.js + Tailwind CSS) and **backend** (Node.js + Express) code, along with instructions for local setup, deployment, and usage.
 
+> **Deployed on AWS** at:  
+> **[http://18.231.208.120/](http://18.231.208.120/)**
+
 ---
 
 ## Table of Contents
@@ -14,10 +17,8 @@ Shortify is a simple and efficient URL-shortening web application. It allows use
 7. [API Endpoints](#api-endpoints)
 8. [Database Model](#database-model)
 9. [Deployment Details](#deployment-details)
-10. [Testing the Application](#testing-the-application)
-11. [Known Limitations](#known-limitations)
-12. [Further Improvements](#further-improvements)
-13. [Contact / Questions](#contact--questions)
+10. [GitHub Actions (CI/CD)](#github-actions-cicd)
+11. [Contact / Questions](#contact--questions)
 
 ---
 
@@ -123,7 +124,7 @@ To run locally, you can either use a local PostgreSQL or set up environment vari
    ```
 
 4. **Access in your browser**  
-   - Frontend: [http://localhost:3000](http://localhost:3000)  
+   - Frontend: [http://localhost:3000](http://localhost:3000)
    - Example API call: [http://localhost:3001/api/shorten](http://localhost:3001/api/shorten) (if your backend port is 3001)
 
 ---
@@ -266,18 +267,32 @@ We deployed on **AWS EC2** (Ubuntu), with the following steps:
    sudo nginx -t
    sudo systemctl restart nginx
    ```
-8. **Actions** Use [GitHub Actions](https://github.com/features/actions) for CI/CD: push to `main` triggers a deploy script that pulls code on EC2, runs `npm install`, rebuilds, etc.
+
+8. **(Optional)** Use [GitHub Actions](https://github.com/features/actions) for CI/CD: push to `main` triggers a deploy script that pulls code on EC2, runs `npm install`, rebuilds, etc.
 
 ---
 
-## 10. Contact / Questions
+## 10. GitHub Actions (CI/CD)
+
+This project includes a sample workflow file in `.github/workflows/deploy.yml` that uses [appleboy/ssh-action](https://github.com/appleboy/ssh-action) to deploy changes automatically whenever you push to the `main` branch. Steps to configure:
+
+1. **Generate or obtain an SSH key** on your EC2 instance and add the public key as a Deploy Key (with write access) to your GitHub repo. Store the private key as a GitHub secret (e.g. `EC2_SSH_KEY`).
+2. **Define secrets** in your repo settings → Secrets and variables → Actions:
+   - `EC2_HOST` = the public IP of your EC2
+   - `EC2_USER` = e.g. `ubuntu`
+   - `EC2_SSH_KEY` = entire private key text
+3. **Review the `deploy.yml`** to ensure it matches your paths (like `~/shortify-app`) and commands you want to run (e.g., `git pull`, `npm install`, `pm2 restart`).
+4. **Push changes** → GitHub Actions uses those secrets to SSH into EC2 and execute your deploy script.
+
+---
+
+## 11. Contact / Questions
 For any questions, clarifications, or additional support about this project, please open an **issue** in this repository or reach out via the contact details in your project environment.
 
 ### Live Demo
 > **Deployed on AWS** at:  
 > **[http://18.231.208.120/](http://18.231.208.120/)**
 
-Feel free to try it out by shortening your own URLs and viewing the stats.  
+Feel free to try it out by shortening your own URLs and viewing the stats.
 
-**Thank you for reviewing the project!** If you encounter any issues or have suggestions for improvements, please create an issue or pull request. Happy shortening!
 

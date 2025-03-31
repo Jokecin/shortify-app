@@ -294,5 +294,4 @@ For any questions, clarifications, or additional support about this project, ple
 
 Feel free to try it out by shortening your own URLs and viewing the stats.
 
-**Thank you for reviewing the project!** If you encounter any issues or have suggestions for improvements, please create an issue or pull request. Happy shortening!
 

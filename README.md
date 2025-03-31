@@ -102,7 +102,7 @@ To run locally, you can either use a local PostgreSQL or set up environment vari
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/<your-user>/shortify-app.git
+   git clone https://github.com/Jokecin/shortify-app.git
    cd shortify-app
    ```
 
